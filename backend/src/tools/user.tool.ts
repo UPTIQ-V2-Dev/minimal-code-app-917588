@@ -8,11 +8,18 @@ const userSchema = z.object({
     id: z.number(),
     email: z.string(),
     name: z.string().nullable(),
-    password: z.string(),
     role: z.string(),
     isEmailVerified: z.boolean(),
     createdAt: z.string(),
     updatedAt: z.string()
+});
+
+const paginatedUsersSchema = z.object({
+    results: z.array(userSchema),
+    page: z.number(),
+    limit: z.number(),
+    totalPages: z.number(),
+    totalResults: z.number()
 });
 
 const createUserTool: MCPTool = {
@@ -28,29 +35,39 @@ const createUserTool: MCPTool = {
     outputSchema: userSchema,
     fn: async (inputs: { email: string; password: string; name: string; role: Role }) => {
         const user = await userService.createUser(inputs.email, inputs.password, inputs.name, inputs.role);
-        return user;
+        return {
+            ...user,
+            createdAt: user.createdAt.toISOString(),
+            updatedAt: user.updatedAt.toISOString()
+        };
     }
 };
 
 const getUsersTool: MCPTool = {
     id: 'user_get_all',
     name: 'Get All Users',
-    description: 'Get all users with optional filters and pagination',
+    description: 'Get paginated list of users with optional filters',
     inputSchema: z.object({
         name: z.string().optional(),
         role: z.string().optional(),
         sortBy: z.string().optional(),
-        limit: z.number().int().optional(),
-        page: z.number().int().optional()
+        limit: z.number().int().min(1).max(100).optional(),
+        page: z.number().int().min(1).optional()
     }),
-    outputSchema: z.object({
-        users: z.array(userSchema)
-    }),
+    outputSchema: paginatedUsersSchema,
     fn: async (inputs: { name?: string; role?: string; sortBy?: string; limit?: number; page?: number }) => {
         const filter = pick(inputs, ['name', 'role']);
         const options = pick(inputs, ['sortBy', 'limit', 'page']);
         const result = await userService.queryUsers(filter, options);
-        return { users: result };
+        
+        return {
+            ...result,
+            results: result.results.map(user => ({
+                ...user,
+                createdAt: user.createdAt.toISOString(),
+                updatedAt: user.updatedAt.toISOString()
+            }))
+        };
     }
 };
 
@@ -67,7 +84,11 @@ const getUserTool: MCPTool = {
         if (!user) {
             throw new Error('User not found');
         }
-        return user;
+        return {
+            ...user,
+            createdAt: user.createdAt.toISOString(),
+            updatedAt: user.updatedAt.toISOString()
+        };
     }
 };
 
@@ -85,7 +106,11 @@ const updateUserTool: MCPTool = {
     fn: async (inputs: { userId: number; name?: string; email?: string; password?: string }) => {
         const updateBody = pick(inputs, ['name', 'email', 'password']);
         const user = await userService.updateUserById(inputs.userId, updateBody);
-        return user;
+        return {
+            ...user,
+            createdAt: user.createdAt.toISOString(),
+            updatedAt: user.updatedAt.toISOString()
+        };
     }
 };
 

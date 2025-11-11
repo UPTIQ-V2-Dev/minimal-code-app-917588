@@ -60,9 +60,41 @@
 
 ---
 
+### 3. Authentication System (Login Page)
+
+### Login Page
+**Route**: `/login`
+**File**: `src/pages/LoginPage.tsx`
+- Email/password login form
+- Form validation with error handling
+- Redirect to dashboard after successful login
+- Uses existing auth service in `src/services/auth.ts`
+- Uses: Card, Button, Input, Label, Alert components
+
+**Auth Components**:
+- `src/hooks/useAuth.tsx` - Custom hook for authentication state
+- Update routing in `src/App.tsx` to include login route
+- Protected route wrapper for authenticated pages
+
+**Form Handling**:
+- React Hook Form with validation
+- Error states and loading indicators
+- Integration with existing authService.login()
+
+**Types**: 
+- Uses existing LoginRequest, AuthResponse from `src/types/user.ts`
+
+**API Integration**:
+- Uses existing authService from `src/services/auth.ts`
+- Handles mock data with VITE_USE_MOCK_DATA env variable
+- Auto token refresh and storage handling
+
+---
+
 ## Implementation Priority
 1. **Option 1**: Single page with WelcomeCard (absolute minimum)
-2. **Option 2**: Two-page app with routing (if navigation needed)
+2. **Option 2**: Two-page app with routing (if navigation needed)  
+3. **Option 3**: Authentication system with login page (recommended)
 
 ## Existing Assets to Use
 - All shadcn/ui components already configured

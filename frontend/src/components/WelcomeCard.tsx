@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 
@@ -12,7 +13,9 @@ export const WelcomeCard = () => {
         <p className="text-sm text-muted-foreground mb-4">
           This is a minimal React application built with Vite, TypeScript, and Tailwind CSS.
         </p>
-        <Button className="w-full">Get Started</Button>
+        <Button asChild className="w-full">
+          <Link to="/login">Sign In</Link>
+        </Button>
       </CardContent>
     </Card>
   );

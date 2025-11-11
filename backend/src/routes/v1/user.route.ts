@@ -243,7 +243,11 @@ export default router;
  *         description: User id
  *     responses:
  *       "200":
- *         description: No content
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":

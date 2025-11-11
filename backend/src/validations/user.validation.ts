@@ -7,29 +7,29 @@ const createUser = {
         email: Joi.string().required().email(),
         password: Joi.string().required().custom(password),
         name: Joi.string().required(),
-        role: Joi.string().required().valid(Role.USER, Role.ADMIN)
+        role: Joi.string().required().valid(...Object.values(Role))
     })
 };
 
 const getUsers = {
     query: Joi.object().keys({
         name: Joi.string(),
-        role: Joi.string(),
+        role: Joi.string().valid(...Object.values(Role)),
         sortBy: Joi.string(),
-        limit: Joi.number().integer(),
-        page: Joi.number().integer()
+        limit: Joi.number().integer().min(1).max(100),
+        page: Joi.number().integer().min(1)
     })
 };
 
 const getUser = {
     params: Joi.object().keys({
-        userId: Joi.number().integer()
+        userId: Joi.string().required().pattern(/^\d+$/).message('User ID must be a valid number')
     })
 };
 
 const updateUser = {
     params: Joi.object().keys({
-        userId: Joi.number().integer()
+        userId: Joi.string().required().pattern(/^\d+$/).message('User ID must be a valid number')
     }),
     body: Joi.object()
         .keys({
@@ -42,7 +42,7 @@ const updateUser = {
 
 const deleteUser = {
     params: Joi.object().keys({
-        userId: Joi.number().integer()
+        userId: Joi.string().required().pattern(/^\d+$/).message('User ID must be a valid number')
     })
 };
 

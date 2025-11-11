@@ -2,7 +2,7 @@ import type { PaginatedResponse } from '@/types/api';
 import type { AuthResponse, User } from '@/types/user';
 
 export const mockUser: User = {
-    id: 1,
+    id: '1',
     email: 'user@example.com',
     name: 'John Doe',
     role: 'USER',
@@ -12,7 +12,7 @@ export const mockUser: User = {
 };
 
 export const mockAdminUser: User = {
-    id: 2,
+    id: '2',
     email: 'admin@example.com',
     name: 'Jane Smith',
     role: 'ADMIN',
